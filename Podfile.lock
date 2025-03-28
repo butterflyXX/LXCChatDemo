@@ -9,6 +9,7 @@ PODS:
   - MQTTClient/Min (0.15.3)
   - Protobuf (4.30.1)
   - SnapKit (5.7.1)
+  - SwiftProtobuf (1.29.0)
   - WCDB.swift (2.1.10):
     - WCDBOptimizedSQLCipher (= 1.4.7)
   - WCDBOptimizedSQLCipher (1.4.7)
@@ -17,6 +18,7 @@ DEPENDENCIES:
   - MQTTClient
   - Protobuf
   - SnapKit
+  - SwiftProtobuf
   - WCDB.swift
 
 SPEC REPOS:
@@ -24,6 +26,7 @@ SPEC REPOS:
     - MQTTClient
     - Protobuf
     - SnapKit
+    - SwiftProtobuf
     - WCDB.swift
     - WCDBOptimizedSQLCipher
 
@@ -31,9 +34,10 @@ SPEC CHECKSUMS:
   MQTTClient: 0dfa04e789479c2e461786464969895c1fcb0875
   Protobuf: 4578a463e71fbb1e5e77dd81d4ec718bef828475
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
+  SwiftProtobuf: b7aa08087e2ab6d162862d143020091254095f69
   WCDB.swift: 21ca53849dabc6c98e6645f3fb669f45a47e7dc9
   WCDBOptimizedSQLCipher: 9bceac087eff9625b151838d3a30364f53f71ad9
 
-PODFILE CHECKSUM: 0c067322b2d2c96fba08e2e43000c254d5fc62c8
+PODFILE CHECKSUM: df7e0e2121c52bec3ad4ef230f150630a8759bbd
 
 COCOAPODS: 1.16.2
