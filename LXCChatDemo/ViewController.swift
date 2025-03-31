@@ -11,9 +11,16 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        ChatDBManager.shared
+        // 添加右上角按钮
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        navigationItem.rightBarButtonItem = addButton
     }
 
+    @objc func addButtonTapped() {
+        let addFriendVC = AddFriendViewController()
+        navigationController?.pushViewController(addFriendVC, animated: true)
+    }
 
 }
 

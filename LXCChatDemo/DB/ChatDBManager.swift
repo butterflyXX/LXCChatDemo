@@ -5,6 +5,9 @@
 //  Created by 刘晓晨 on 2025/3/28.
 //
 
+import Foundation
+import WCDBSwift
+
 enum ChatTable: String {
     case userList
     case messageList
@@ -12,10 +15,45 @@ enum ChatTable: String {
 
 class ChatDBManager {
     static let shared = ChatDBManager()
-    private init() {}
-    
-    // MARK: - userList 操作
-    func createUserListTable() {
+    let dbManager = DBManager(dbPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/im.db")
+    private init() {
         
+        // 创建表
+        dbManager.createTable(table: ChatTable.userList.rawValue, itemType: User.self) { error in
+            
+        }
+        
+//        dbManager.createTable(table: ChatTable.messageList.rawValue, itemType: DAMessage.self) { error in
+//            
+//        }
+    }
+    
+    func insertUser(user: User, completion: ValueChanged<Error?>? = nil) {
+        dbManager.insertOrReplace(table: ChatTable.userList.rawValue, items: [user]) { error in
+            run {completion?(error)}}
+        }
+    
+    func updateUser(user: User, completion: ValueChanged<Error?>? = nil) {
+        dbManager.update(table: ChatTable.userList.rawValue, item: user, on: User.Properties.all, where: User.Properties.userId == user.userId) { error in
+            run {completion?(error)}
+        }
+    }
+    
+    func getUserList(completion: @escaping ValueChanged<[User]?>) {
+        dbManager.getObjects(table: ChatTable.userList.rawValue, cls: User.self, on: []) { list in
+            run {completion(list)}
+        }
+    }
+    
+    func insertMessage(message: DAMessage, completion: ValueChanged<Error?>? = nil) {
+        dbManager.insertOrReplace(table: ChatTable.messageList.rawValue, items: [message]) { error in
+            run {completion?(error)}
+        }
+    }
+    
+    func updateMessage(message: DAMessage, completion: ValueChanged<Error?>? = nil) {
+        dbManager.update(table: ChatTable.userList.rawValue, item: message, on: DAMessage.Properties.all, where: DAMessage.Properties.messageId == message.messageId) { error in
+            run {completion?(error)}
+        }
     }
 }

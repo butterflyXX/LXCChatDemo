@@ -11,25 +11,9 @@ import Foundation
 class DBManager {
     let database: Database
     let dbQueue: DispatchQueue = DispatchQueue.init(label: "kDBQueueIdentifier")
-    private init(dbPath: String) {
+    init(dbPath: String) {
         database = Database(at: dbPath)
     }
-    
-//    func createUserTable(completion: @escaping ValueChanged<Error?>) {
-//        createTable(tableType: .user, itemType: User.self, completion: completion)
-//    }
-//    
-//    func insertUser(user: User, completion: @escaping ValueChanged<Error?>) {
-//        insert(tableType: .user, items: [user], completion: completion)
-//    }
-//    
-//    func updateUser(user: User, completion: @escaping ValueChanged<Error?>) {
-//        update(tableType: .user, item: user, on: [User.Properties.age, User.Properties.name], completion: completion, where: User.Properties.identifier == user.identifier)
-//    }
-//    
-//    func insertOrReplaceUser(user: User, completion: @escaping ValueChanged<Error?>) {
-//        insertOrReplace(tableType: .user, items: [user], completion: completion)
-//    }
     
     /// 创建表
     func createTable<T: TableDecodable>(table: String, itemType: T.Type, completion: ValueChanged<Error?>?) {
@@ -66,7 +50,7 @@ class DBManager {
                                    orderBy orderList: [OrderBy]? = nil,
                                    limit: Limit? = nil,
                                    offset: Offset? = nil,
-                                   completion: ValueChanged<Error?>?) {
+                                   completion: ValueChanged<Error?>? = nil) {
         dbQueue.async {
             do {
                 try self.database.update(table: table,
@@ -117,6 +101,7 @@ class DBManager {
     
     /// 查询
     func getObjects<T: TableDecodable>(table: String,
+                                       cls: T.Type,
                                       on propertyConvertibleList: [PropertyConvertible],
                                       where condition: Condition? = nil,
                                       orderBy orderList: [OrderBy]? = nil,
