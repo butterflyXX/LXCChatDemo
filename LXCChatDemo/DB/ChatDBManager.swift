@@ -43,8 +43,8 @@ class ChatDBManager {
         }
     }
     
-    func getUserList(completion: @escaping ValueChanged<[User]?>) {
-        dbManager.getObjects(table: ChatTable.userList.rawValue, on: User.Properties.all) { list in
+    func getUserList(count: Int? = nil, completion: @escaping ValueChanged<[User]?>) {
+        dbManager.getObjects(table: ChatTable.userList.rawValue, on: User.Properties.all, limit: count) { list in
             run {completion(list)}
         }
     }

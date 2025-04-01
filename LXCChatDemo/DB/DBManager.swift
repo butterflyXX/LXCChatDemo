@@ -117,7 +117,7 @@ class DBManager {
                                                               limit: limit,
                                                               offset: offset)
                 completion(objects)
-            } catch let _ {
+            } catch _ {
                 completion(nil)
             }
         }

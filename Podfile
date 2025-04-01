@@ -12,6 +12,8 @@ target 'LXCChatDemo' do
   pod 'SwiftProtobuf'
   pod 'WCDB.swift'
   pod 'YYModel'
+  pod 'RxSwift'
+  pod 'RxCocoa'
 
 end
 
