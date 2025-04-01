@@ -20,12 +20,16 @@ class ChatDBManager {
         
         // 创建表
         dbManager.createTable(table: ChatTable.userList.rawValue, itemType: User.self) { error in
-            
+            if let err = error {
+                NSLog(err.localizedDescription)
+            }
         }
         
-//        dbManager.createTable(table: ChatTable.messageList.rawValue, itemType: DAMessage.self) { error in
-//            
-//        }
+        dbManager.createTable(table: ChatTable.messageList.rawValue, itemType: DAMessage.self) { error in
+            if let err = error as? WCDBError {
+                NSLog(err.infos.description)
+            }
+        }
     }
     
     func insertUser(user: User, completion: ValueChanged<Error?>? = nil) {
@@ -40,7 +44,7 @@ class ChatDBManager {
     }
     
     func getUserList(completion: @escaping ValueChanged<[User]?>) {
-        dbManager.getObjects(table: ChatTable.userList.rawValue, cls: User.self, on: []) { list in
+        dbManager.getObjects(table: ChatTable.userList.rawValue, on: User.Properties.all) { list in
             run {completion(list)}
         }
     }
@@ -54,6 +58,12 @@ class ChatDBManager {
     func updateMessage(message: DAMessage, completion: ValueChanged<Error?>? = nil) {
         dbManager.update(table: ChatTable.userList.rawValue, item: message, on: DAMessage.Properties.all, where: DAMessage.Properties.messageId == message.messageId) { error in
             run {completion?(error)}
+        }
+    }
+    
+    func getMessageList(completion: @escaping ValueChanged<[DAMessage]?>) {
+        dbManager.getObjects(table: ChatTable.messageList.rawValue, on: DAMessage.Properties.all) { list in
+            run {completion(list)}
         }
     }
 }

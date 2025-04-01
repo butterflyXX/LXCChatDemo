@@ -12,6 +12,7 @@ class DBManager {
     let database: Database
     let dbQueue: DispatchQueue = DispatchQueue.init(label: "kDBQueueIdentifier")
     init(dbPath: String) {
+        NSLog(dbPath)
         database = Database(at: dbPath)
     }
     
@@ -101,7 +102,6 @@ class DBManager {
     
     /// 查询
     func getObjects<T: TableDecodable>(table: String,
-                                       cls: T.Type,
                                       on propertyConvertibleList: [PropertyConvertible],
                                       where condition: Condition? = nil,
                                       orderBy orderList: [OrderBy]? = nil,
@@ -117,7 +117,7 @@ class DBManager {
                                                               limit: limit,
                                                               offset: offset)
                 completion(objects)
-            } catch let error {
+            } catch let _ {
                 completion(nil)
             }
         }
