@@ -42,27 +42,16 @@ class UserCell: UITableViewCell {
     
     // MARK: - UI Setup
     private func setupUI() {
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(detailLabel)
         
-        // 使用 SnapKit 设置约束
-        nameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(18)
+        let stack = UIStackView(arrangedSubviews: [nameLabel, detailLabel])
+        stack.axis = .vertical
+        stack.spacing = 4
+        contentView.addSubview(stack)
+        stack.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.leading.equalTo(16)
+            make.top.equalTo(12)
         }
-        
-        detailLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(8)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(16)
-            make.bottom.equalToSuperview().offset(-12)
-        }
-        
-        nameLabel.adjustsFontSizeToFitWidth = false
-        detailLabel.adjustsFontSizeToFitWidth = false
     }
     
     // MARK: - Configuration
@@ -73,6 +62,9 @@ class UserCell: UITableViewCell {
             .disposed(by: disposeBag)
         user.observer.map{$0.lastMessageString}
             .bind(to: detailLabel.rx.text)
+            .disposed(by: disposeBag)
+        user.observer.map{$0.lastMessageString.isEmpty}
+            .bind(to: detailLabel.rx.isHidden)
             .disposed(by: disposeBag)
     }
     

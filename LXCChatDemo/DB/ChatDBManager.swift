@@ -44,7 +44,10 @@ class ChatDBManager {
     }
     
     func getUserList(count: Int? = nil, completion: @escaping ValueChanged<[User]?>) {
-        dbManager.getObjects(table: ChatTable.userList.rawValue, on: User.Properties.all, limit: count) { list in
+        dbManager.getObjects(table: ChatTable.userList.rawValue,
+                             on: User.Properties.all,
+                             orderBy: [User.Properties.lastMessageTime.order(.descending)],
+                             limit: count) { list in
             run {completion(list)}
         }
     }
