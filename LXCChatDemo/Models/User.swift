@@ -12,7 +12,7 @@ final class User: TableCodable {
     var userId: String = ""
     var nickname: String = ""
     var avatar: String = ""
-    var lastMessageTime: Int64 = Int64(Date().timeIntervalSince1970)
+    var lastMessageTime: Double = Date().timeIntervalSince1970
     var lastMessageString: String = ""
     
     enum CodingKeys: String, CodingTableKey {

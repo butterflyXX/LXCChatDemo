@@ -11,28 +11,22 @@ class HomeViewModel {
     static let shared = HomeViewModel()
     private init(){}
     
-    var userList: BehaviorRelay<[ViewModel<User>]> = BehaviorRelay<[ViewModel<User>]>(value: [])
+    var userList: BehaviorRelay<[User]> = BehaviorRelay<[User]>(value: [])
     
     func loadData(completion: VoidCallBack? = nil) {
-        ChatDBManager.shared.getUserList { list in
+        IMManager.shared.dbManager?.getUserList { list in
             if let list = list {
-                self.userList.accept(self.userList.value + list.map({
-                    let user = ViewModel($0)
-                    NSLog("\(user.value.lastMessageTime)")
-                    return user
-                }))
+                self.userList.accept(self.userList.value + list)
             }
             completion?()
         }
     }
     
-    func insert(user: User) {
-        self.userList.accept([ViewModel(user)] + self.userList.value)
-    }
-    
-    func update(index: Int) {
+    func update(user: User) {
         var list = userList.value
-        let user = list.remove(at: index)
+        if let index = list.firstIndex(where: {$0.userId == user.userId}) {
+            list.remove(at: index)
+        }
         list.insert(user, at: 0)
         userList.accept(list)
     }

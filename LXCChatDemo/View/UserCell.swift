@@ -55,17 +55,11 @@ class UserCell: UITableViewCell {
     }
     
     // MARK: - Configuration
-    func configure(user: ViewModel<User>) {
+    func configure(user: User) {
         // 使用 RxSwift 绑定数据
-        user.observer.map{$0.nickname}
-            .bind(to: nameLabel.rx.text)
-            .disposed(by: disposeBag)
-        user.observer.map{$0.lastMessageString}
-            .bind(to: detailLabel.rx.text)
-            .disposed(by: disposeBag)
-        user.observer.map{$0.lastMessageString.isEmpty}
-            .bind(to: detailLabel.rx.isHidden)
-            .disposed(by: disposeBag)
+        nameLabel.text = user.nickname
+        detailLabel.text = user.nickname
+        detailLabel.isHidden = user.lastMessageString.isEmpty
     }
     
     // MARK: - Reuse

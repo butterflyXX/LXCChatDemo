@@ -22,7 +22,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
 }
 
 /// 文本消息内容
-struct DA_Text: Sendable {
+struct L_Text: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -35,8 +35,20 @@ struct DA_Text: Sendable {
   init() {}
 }
 
+struct L_Status: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var onLine: Bool = false
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 /// 消息体
-struct DA_Message: @unchecked Sendable {
+struct L_Message: @unchecked Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -57,7 +69,7 @@ struct DA_Message: @unchecked Sendable {
   var status: String = String()
 
   /// 创建时间
-  var createTime: Int64 = 0
+  var createTime: Double = 0
 
   /// 消息内容(序列化后的二进制数据)
   var content: Data = Data()
@@ -72,12 +84,12 @@ struct DA_Message: @unchecked Sendable {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-fileprivate let _protobuf_package = "DA"
+fileprivate let _protobuf_package = "L"
 
-extension DA_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+extension L_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Text"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    2: .same(proto: "text"),
+    1: .same(proto: "text"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -86,7 +98,7 @@ extension DA_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 2: try { try decoder.decodeSingularStringField(value: &self.text) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.text) }()
       default: break
       }
     }
@@ -94,19 +106,51 @@ extension DA_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
     if !self.text.isEmpty {
-      try visitor.visitSingularStringField(value: self.text, fieldNumber: 2)
+      try visitor.visitSingularStringField(value: self.text, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: DA_Text, rhs: DA_Text) -> Bool {
+  static func ==(lhs: L_Text, rhs: L_Text) -> Bool {
     if lhs.text != rhs.text {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension DA_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+extension L_Status: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".Status"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "onLine"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.onLine) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if self.onLine != false {
+      try visitor.visitSingularBoolField(value: self.onLine, fieldNumber: 1)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: L_Status, rhs: L_Status) -> Bool {
+    if lhs.onLine != rhs.onLine {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension L_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".Message"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .standard(proto: "message_id"),
@@ -130,7 +174,7 @@ extension DA_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
       case 3: try { try decoder.decodeSingularStringField(value: &self.to) }()
       case 4: try { try decoder.decodeSingularStringField(value: &self.type) }()
       case 5: try { try decoder.decodeSingularStringField(value: &self.status) }()
-      case 6: try { try decoder.decodeSingularInt64Field(value: &self.createTime) }()
+      case 6: try { try decoder.decodeSingularDoubleField(value: &self.createTime) }()
       case 7: try { try decoder.decodeSingularBytesField(value: &self.content) }()
       case 8: try { try decoder.decodeMapField(fieldType: SwiftProtobuf._ProtobufMap<SwiftProtobuf.ProtobufString,SwiftProtobuf.ProtobufString>.self, value: &self.extra) }()
       default: break
@@ -154,8 +198,8 @@ extension DA_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     if !self.status.isEmpty {
       try visitor.visitSingularStringField(value: self.status, fieldNumber: 5)
     }
-    if self.createTime != 0 {
-      try visitor.visitSingularInt64Field(value: self.createTime, fieldNumber: 6)
+    if self.createTime.bitPattern != 0 {
+      try visitor.visitSingularDoubleField(value: self.createTime, fieldNumber: 6)
     }
     if !self.content.isEmpty {
       try visitor.visitSingularBytesField(value: self.content, fieldNumber: 7)
@@ -166,7 +210,7 @@ extension DA_Message: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementatio
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: DA_Message, rhs: DA_Message) -> Bool {
+  static func ==(lhs: L_Message, rhs: L_Message) -> Bool {
     if lhs.messageID != rhs.messageID {return false}
     if lhs.from != rhs.from {return false}
     if lhs.to != rhs.to {return false}

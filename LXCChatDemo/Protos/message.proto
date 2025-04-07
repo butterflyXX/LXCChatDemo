@@ -1,10 +1,14 @@
 syntax = "proto3";
 
-package DA;
+package L;
 
 // 文本消息内容
 message Text {
-    string text = 2;          // 文本内容
+    string text = 1;          // 文本内容
+}
+
+message Status {
+    bool onLine = 1;
 }
 
 // 消息体
@@ -14,7 +18,7 @@ message Message {
     string to = 3;      // 接收者ID
     string type = 4;       // 消息类型
     string status = 5;   // 消息状态
-    int64 create_time = 6;      // 创建时间
+    double create_time = 6;      // 创建时间
     bytes content = 7;          // 消息内容(序列化后的二进制数据)
     map<string, string> extra = 8;  // 扩展字段
 }

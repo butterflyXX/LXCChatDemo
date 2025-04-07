@@ -86,9 +86,9 @@ class AddFriendViewController: UIViewController {
         friend.nickname = nickname
         
         // 保存到数据库
-        ChatDBManager.shared.insertUser(user: friend) { [weak self] error in
+        IMManager.shared.dbManager?.insertUser(user: friend) { [weak self] error in
             if error == nil {
-                HomeViewModel.shared.insert(user: friend)
+                HomeViewModel.shared.update(user: friend)
                 self?.showAlert(message: "添加好友成功") { [weak self] in
                     self?.navigationController?.popViewController(animated: true)
                 }

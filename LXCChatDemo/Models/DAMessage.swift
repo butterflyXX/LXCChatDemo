@@ -13,11 +13,18 @@ final class DAMessage: NSObject, TableCodable {
     var fromId: String = ""
     var toId: String = ""
     var type: String = ""
-    var status: String = ""
-    var createTime: Int64 = Int64(Date().timeIntervalSince1970)
+    var sendStatusString: String = ""
+    var createTime: Double = Date().timeIntervalSince1970
     var contentString: String?
     
-    var readStatus: DAMessageReadStatus {DAMessageReadStatus.fromValue(status) ?? .sending}
+    var sendStatus: DAMessageSendStatus {
+        set {
+            sendStatusString = newValue.rawValue
+        }
+        get {
+            DAMessageSendStatus.fromValue(sendStatusString) ?? .sending
+        }
+    }
     var msgType: DAMessageType? {DAMessageType.fromValue(type)}
     var content: DAMessageContent? {
         set {
@@ -34,7 +41,7 @@ final class DAMessage: NSObject, TableCodable {
         case fromId
         case toId
         case type
-        case status
+        case sendStatusString
         case createTime
         case contentString
         
@@ -46,17 +53,17 @@ final class DAMessage: NSObject, TableCodable {
     override init() {}
     
     init(data: Data) {
-        var msg: DA_Message?
+        var msg: L_Message?
         do {
-            msg = try DA_Message(serializedBytes: data)
+            msg = try L_Message(serializedBytes: data)
         } catch _ as NSError {}
         
-        let finalMsg = msg ?? DA_Message()
+        let finalMsg = msg ?? L_Message()
         messageId = finalMsg.messageID
         fromId = finalMsg.from
         toId = finalMsg.to
         type = finalMsg.type
-        status = finalMsg.status
+        sendStatusString = finalMsg.status
         createTime = finalMsg.createTime
         if let clazz = DAMessageType.contentClass(rawValue: finalMsg.type) as? DAMessageContent.Type {
             contentString = clazz.init(data: finalMsg.content).toJsonString()
@@ -71,12 +78,12 @@ final class DAMessage: NSObject, TableCodable {
     }
     
     func toData() -> Data? {
-        var msg = DA_Message()
+        var msg = L_Message()
         msg.messageID = messageId
         msg.from = fromId
         msg.to = toId
         msg.type = type
-        msg.status = status
+        msg.status = sendStatusString
         msg.createTime = createTime
         if let data = content?.toData() {
             msg.content = data

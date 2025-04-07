@@ -14,10 +14,10 @@ enum ChatTable: String {
 }
 
 class ChatDBManager {
-    static let shared = ChatDBManager()
-    let dbManager = DBManager(dbPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/im.db")
-    private init() {
-        
+    var dbManager: DBManager
+    init(userId: String) {
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        dbManager = DBManager(dbPath: path + "/im/\(userId)/storage.db")
         // 创建表
         dbManager.createTable(table: ChatTable.userList.rawValue, itemType: User.self) { error in
             if let err = error {
@@ -64,8 +64,20 @@ class ChatDBManager {
         }
     }
     
-    func getMessageList(completion: @escaping ValueChanged<[DAMessage]?>) {
-        dbManager.getObjects(table: ChatTable.messageList.rawValue, on: DAMessage.Properties.all) { list in
+    func getMessageList(userId: String, createTime: Double? = nil, count: Int? = nil, completion: @escaping ValueChanged<[DAMessage]?>) {
+        
+        var max = createTime ?? Date().timeIntervalSince1970
+        if (max < 0) {
+            max = Date().timeIntervalSince1970
+        }
+        let exp = DAMessage.Properties.toId == userId && DAMessage.Properties.createTime < max
+        
+        dbManager.getObjects(table: ChatTable.messageList.rawValue,
+                             on: DAMessage.Properties.all,
+                             where: exp,
+                             orderBy: [DAMessage.Properties.createTime.order(.descending)],
+                             limit: count
+        ) { list in
             run {completion(list)}
         }
     }

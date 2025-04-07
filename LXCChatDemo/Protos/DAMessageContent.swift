@@ -10,12 +10,12 @@ import YYModel
 import WCDBSwift
 
 // 消息状态
-enum DAMessageReadStatus: String {
+enum DAMessageSendStatus: String {
     case sending   // 发送中
     case success  // 发送成功
     case failed   // 发送失败
-    static func fromValue(_ value: String) -> DAMessageReadStatus? {
-        return DAMessageReadStatus(rawValue: value)
+    static func fromValue(_ value: String) -> DAMessageSendStatus? {
+        return DAMessageSendStatus(rawValue: value)
     }
 }
 
@@ -36,7 +36,11 @@ enum DAMessageType: String {
     }
 }
 
-class DAMessageContent: NSObject, YYModel {
+@objcMembers class DAMessageContent: NSObject, YYModel {
+    
+    override init() {
+        super.init()
+    }
     
     /// 接收消息时使用的消息创建方法
     required init(data: Data) {}
@@ -53,12 +57,16 @@ class DAMessageContent: NSObject, YYModel {
 }
 
 class DAMessageText: DAMessageContent {
-     var text: String?
+    var text: String?
+    
+    override init() {
+        super.init()
+    }
     
     required init(data: Data) {
-        var msg: DA_Text?
+        var msg: L_Text?
         do {
-            msg = try DA_Text(serializedBytes: data)
+            msg = try L_Text(serializedBytes: data)
         } catch _ as NSError {}
         text = msg?.text ?? ""
         super.init(data: data)
@@ -67,7 +75,7 @@ class DAMessageText: DAMessageContent {
     override var msgType: DAMessageType {.text}
     
     override func toData() -> Data? {
-        var msg = DA_Text()
+        var msg = L_Text()
         msg.text = text ?? ""
         return msg.toData()
     }
